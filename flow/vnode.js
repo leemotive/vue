@@ -4,13 +4,13 @@ declare type VNodeComponentOptions = {
   Ctor: Class<Component>;
   propsData: ?Object;
   listeners: ?Object;
-  children: ?VNodeChildren;
+  children: ?Array<VNode>;
   tag?: string;
 }
 
 declare type MountedComponentVNode = {
   componentOptions: VNodeComponentOptions;
-  child: Component;
+  componentInstance: Component;
   parent: VNode;
   data: VNodeData;
 }
@@ -19,14 +19,14 @@ declare type MountedComponentVNode = {
 declare type VNodeWithData = {
   tag: string;
   data: VNodeData;
-  children: Array<VNode> | void;
+  children: ?Array<VNode>;
   text: void;
-  elm: HTMLElement;
+  elm: any;
   ns: string | void;
   context: Component;
   key: string | number | void;
   parent?: VNodeWithData;
-  child?: Component;
+  componentInstance?: Component;
   isRootInsert: boolean;
 }
 
@@ -34,9 +34,11 @@ declare interface VNodeData {
   key?: string | number;
   slot?: string;
   ref?: string;
+  pre?: boolean;
   tag?: string;
   staticClass?: string;
   class?: any;
+  staticStyle?: { [key: string]: any };
   style?: Array<Object> | Object;
   props?: { [key: string]: any };
   attrs?: { [key: string]: string };
@@ -52,12 +54,15 @@ declare interface VNodeData {
   };
   directives?: Array<VNodeDirective>;
   keepAlive?: boolean;
+  scopedSlots?: { [key: string]: Function }
 }
 
 declare type VNodeDirective = {
   name: string;
+  rawName: string;
   value?: any;
   oldValue?: any;
   arg?: string;
-  modifiers?: { [key: string]: boolean };
+  modifiers?: ASTModifiers;
+  def?: Object;
 }
